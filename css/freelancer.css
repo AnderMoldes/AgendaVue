@@ -34,6 +34,7 @@ h6 {
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
+    text-align: center;
 }
 
 hr.star-light,
@@ -44,6 +45,15 @@ hr.star-primary {
     border: 0;
     border-top: solid 5px;
     text-align: center;
+}
+
+.icons-table {
+	height: 25px;
+	width: 25px;
+}
+.edit{
+    background-color: black;
+    margin-block: 5px;
 }
 
 hr.star-light:after,
@@ -171,7 +181,7 @@ header .intro-text .skills {
 }
 
 section {
-    padding: 100px 0;
+    padding: 75px 0;
 }
 
 section h2 {
@@ -282,7 +292,7 @@ section.success a.active {
     position: relative;
     margin-bottom: 0;
     padding-bottom: .5em;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #2c3e50;
 }
 
 .floating-label-form-group input,
@@ -297,6 +307,8 @@ section.success a.active {
     background: 0 0;
     box-shadow: none!important;
     resize: none;
+    width: 400px;
+    
 }
 
 .floating-label-form-group label {
@@ -318,7 +330,7 @@ section.success a.active {
 
 .floating-label-form-group::not(:first-child) {
     padding-left: 14px;
-    border-left: 1px solid #eee;
+    border-bottom: 1px solid #2c3e50;
 }
 
 .floating-label-form-group-with-value label {
@@ -331,7 +343,7 @@ section.success a.active {
 }
 
 form .row:first-child .floating-label-form-group {
-    border-top: 1px solid #eee;
+    border-bottom: 1px solid #2c3e50;
 }
 
 footer {
@@ -456,4 +468,27 @@ footer .footer-below {
 .portfolio-modal .modal-backdrop {
     display: none;
     opacity: 0;
+}
+
+.Social{
+    width: 100%;
+    margin-top: 50px;
+    justify-content: center;
+}
+.twitt{
+    float: left;
+    width: 50%;
+
+}
+
+.fb-root{
+    width: 50%;
+    float: right;
+}
+.fb-post{
+    float: right;
+}
+.fb-comments{
+    margin-top: 30px;
+    float: right;
 }
