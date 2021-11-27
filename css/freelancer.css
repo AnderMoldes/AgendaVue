@@ -31,6 +31,7 @@ h3,
 h4,
 h5,
 h6 {
+   
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
@@ -480,15 +481,20 @@ footer .footer-below {
     width: 50%;
 
 }
-
-.fb-root{
-    width: 50%;
+.facebook{
     float: right;
+    width: 50%;
+
 }
+
+#fb-root{
+    float: right;
+} 
 .fb-post{
     float: right;
 }
-.fb-comments{
+.fb-page{
     margin-top: 30px;
-    float: right;
+    margin-left: 140px;
+    width: 100%;
 }
