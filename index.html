@@ -356,7 +356,6 @@ const firebaseConfig = {
 const appfirebase = initializeApp(firebaseConfig);
 const db = getFirestore();
 
-
 const app = new Vue({
     el: '#app',
     data: {
@@ -398,11 +397,7 @@ const app = new Vue({
             ) {
                 alert('¡Es necesario rellenar todos los campos!');
             } else {
-                this.contactos.push({
-                    nombre: this.contactoNombre,
-                    telefono: this.contactoTelefono,
-                    email: this.contactoEmail,
-                });
+               e.preventDefault();
 
                 try {
                     const docRef = await addDoc(collection(db, "contactos"), {
