@@ -122,21 +122,21 @@
 
                     <div class="rowCenter" v-for="(item, index) of contactos">
 
-                        <div class="col-xs-4" :class= "[ item.seleccionado ? 'table-info' : ' ']">
+                        <div class="col-xs-4">
                             <!-- <p>John Doe</p> -->
                             <br>
                             {{item.nombre}}
                             <br>
                         </div>
 
-                        <div class="col-xs-4" :class= "[ item.seleccionado ? 'table-info' : ' ']">
+                        <div class="col-xs-4">
                             <!-- <p>john.doe@deusto.es</p> -->
                             <br>
                             {{item.email}}
                             <br>
                         </div>
 
-                        <div class="col-xs-3" :class= "[ item.seleccionado ? 'table-info' : ' ']">
+                        <div class="col-xs-3">
                             <!-- <p>555555555</p> -->
                             <br>
                             {{item.telefono}}
@@ -146,22 +146,11 @@
                         <div class="col-xs-1">
 
                             <button
-                            class="btn btn-danger btn-sm" @click="eliminar(index)">
+                            class="btn btn-danger btn-sm" @click="eliminar(item.id)">
                             <span class="glyphicon glyphicon-remove"></span>
                                 
                             </button>
                             <br>
-
-                            <button class="edit"
-                                @click="mostrarContacto(index)"
-                            >
-                                <img
-                                    class="icons-table"
-                                    src="./img/edit.png"
-                                    alt="Editar"
-                                />
-                            </button>
-
                         </div>
 
                     </div>
@@ -257,7 +246,7 @@
 
                     <div class="Social">
                         <div class="twitt">
-                            <a class="twitter-timeline" href="https://twitter.com/bbcmundo?ref_src=twsrc%5Etfw"  data-tweet-limit="8">Tweets by bbcmundo</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                            <a class="twitter-timeline" href="https://twitter.com/bbcmundo?ref_src=twsrc%5Etfw"  data-tweet-limit="4">Tweets by bbcmundo</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                         </div>
 
                         <div class="facebook">
@@ -325,6 +314,9 @@
                 </a>
             </div>
 
+    </div>
+</body>
+
             <!-- jQuery -->
             <script src="js/jquery.js"></script>
 
@@ -338,13 +330,117 @@
 
             <!-- Custom Theme JavaScript -->
             <script src="js/freelancer.js"></script>
-            
+            <script src="js/jquery.mask.js"></script>
             <!-- Vue -->
             <script src="js/vue.js"></script>   
 
-            <script src="js/main.js"></script>
-    </div>
-</body>
+
+<script type="module"> 
+
+$(document).ready(function () {
+    $('#telefono').mask('000-000-0000');
+});         
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { getFirestore, collection, doc, getDocs, addDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB7Co5_wO-0h2OYJb67hxNrQ6FUfR3mnK8",
+    authDomain: "agenda-6d7c1.firebaseapp.com",
+    projectId: "agenda-6d7c1",
+    storageBucket: "agenda-6d7c1.appspot.com",
+    messagingSenderId: "290757376045",
+    appId: "1:290757376045:web:6096041723d257237060a4"
+}
+
+const appfirebase = initializeApp(firebaseConfig);
+const db = getFirestore();
+
+
+const app = new Vue({
+    el: '#app',
+    data: {
+        titulo: 'Agenda Vue',
+        contactos: [],
+        contactoNombre: '',
+        contactoTelefono: '',
+        contactoEmail: '',
+        seleccionado: false,
+    },
+    methods: {
+        obtenerDocumentos: async function () {
+            this.contactos = [];
+            const contactosRef = collection(db, 'contactos');
+            try {
+                const q = query(contactosRef, orderBy('nombre', 'asc'));
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach((doc) => {
+                    const { id } = doc
+                    this.contactos.push({ id, ...doc.data() })
+                });
+            } catch (error) {
+                alert('No se han podido recuperar los datos, intentelo de nuevo');
+            }
+        },
+
+        limpiar: function () {
+            this.contactoNombre = '';
+            this.contactoTelefono = '';
+            this.contactoEmail = '';
+        },
+        // -- AGREGAR --
+        agregarContacto: async function (e) {
+            //Validaciones
+            if (
+                this.contactoNombre === '' ||
+                this.contactoTelefono === '' ||
+                this.contactoEmail === ''
+            ) {
+                alert('¡Es necesario rellenar todos los campos!');
+            } else {
+                this.contactos.push({
+                    nombre: this.contactoNombre,
+                    telefono: this.contactoTelefono,
+                    email: this.contactoEmail,
+                });
+
+                try {
+                    const docRef = await addDoc(collection(db, "contactos"), {
+                        nombre: this.contactoNombre,
+                        email: this.contactoEmail,
+                        telefono: this.contactoTelefono
+                    });
+
+                    this.obtenerDocumentos();
+                    alert('¡Contacto agregado correctamente!');
+                    this.limpiar();
+
+                    let txtNombre = document.getElementById('txtNombre');
+                    txtNombre.focus();
+                } catch (error) {
+                    alert('Fallo detectado, intente realizar el proceso de nuevo');
+                }
+            }
+        },
+
+        // -- ELIMINAR --
+        eliminar: async function (id) {
+            try {
+                await deleteDoc(doc(db, "contactos", id));
+                this.obtenerDocumentos();
+                alert('Contacto eliminado correctamente');
+            } catch (error) {
+                alert('Fallo detectado, intente realizar el proceso nuevamente');
+            }
+        },
+    },
+    // -- GUARDAR --
+    created: function () {
+        this.obtenerDocumentos();
+    }
+    });
+            
+</script>      
 
 </html>
 
